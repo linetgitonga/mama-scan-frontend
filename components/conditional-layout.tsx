@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { usePathname } from "next/navigation"
-import { SidebarLayout } from "@/components/sidebar-layout"
+import { SidebarLayout } from "../components/sidebar-layout"
 
 interface ConditionalLayoutProps {
   children: React.ReactNode

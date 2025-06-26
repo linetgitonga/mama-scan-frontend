@@ -27,7 +27,7 @@ import {
   ChevronRight,
 } from "lucide-react"
 
-import { useAuth } from "@/hooks/useAuth"
+import { useAuth } from "../hooks/useAuth"
 import {
   Sidebar,
   SidebarContent,
@@ -44,17 +44,17 @@ import {
   SidebarMenuSubItem,
   SidebarRail,
   SidebarSeparator,
-} from "@/components/ui/sidebar"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
+} from "../components/ui/sidebar"
+import { Avatar, AvatarFallback } from "../components/ui/avatar"
+import { Badge } from "../components/ui/badge"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+} from "../components/ui/dropdown-menu"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../components/ui/collapsible"
 
 // Navigation data
 const navigationData = {

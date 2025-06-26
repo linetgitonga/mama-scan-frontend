@@ -2,9 +2,9 @@
 
 import type React from "react"
 
-import { AppSidebar } from "@/components/app-sidebar"
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { Separator } from "@/components/ui/separator"
+import { AppSidebar } from "../components/app-sidebar"
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "../components/ui/sidebar"
+import { Separator } from "../components/ui/separator"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -12,13 +12,13 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { ThemeToggle } from "@/components/theme-toggle"
-import { Button } from "@/components/ui/button"
+} from "../components/ui/breadcrumb"
+import { ThemeToggle } from "../components/theme-toggle"
+import { Button } from "../components/ui/button"
 import { Bell, Search } from "lucide-react"
 import { usePathname } from "next/navigation"
-import { useAuth } from "@/hooks/useAuth"
-import { Badge } from "@/components/ui/badge"
+import { useAuth } from "../hooks/useAuth"
+import { Badge } from "../components/ui/badge"
 import { Activity } from "lucide-react"
 
 interface SidebarLayoutProps {

@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState, useEffect, createContext, useContext } from "react"
-import { apiClient, type User } from "@/lib/api"
+import { apiClient, type User } from "../lib/api"
 
 interface AuthContextType {
   user: User | null
