@@ -1,15 +1,15 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card"
+import { Button } from "../../components/ui/button"
+import { Input } from "../../components/ui/input"
+import { Label } from "../../components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select"
+import { Alert, AlertDescription } from "../../components/ui/alert"
+import { Avatar, AvatarFallback } from "../../components/ui/avatar"
+import { Badge } from "../../components/ui/badge"
+import { Separator } from "../../components/ui/separator"
 import {
   User,
   Mail,
@@ -25,8 +25,8 @@ import {
   UserCheck,
   TrendingUp,
 } from "lucide-react"
-import { useAuth } from "@/hooks/useAuth"
-import { apiClient } from "@/lib/api"
+import { useAuth } from "../../hooks/useAuth"
+import { apiClient } from "../../lib/api"
 
 export default function ProfilePage() {
   const { user } = useAuth()

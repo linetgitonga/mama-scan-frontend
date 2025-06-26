@@ -1,16 +1,16 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../components/ui/card"
+import { Button } from "../../../components/ui/button"
+import { Input } from "../../../components/ui/input"
+import { Badge } from "../../../components/ui/badge"
+import { Alert, AlertDescription } from "../../../components/ui/alert"
 import { Search, Calendar, User, Brain, Eye, Download, Activity, AlertTriangle, CheckCircle } from "lucide-react"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { useAuth } from "@/hooks/useAuth"
-import { apiClient, type ScreeningRecord } from "@/lib/api"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../components/ui/select"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../components/ui/table"
+import { useAuth } from "../../../hooks/useAuth"
+import { apiClient, type ScreeningRecord } from "../../../lib/api"
 
 export default function ScreeningHistoryPage() {
   const [searchTerm, setSearchTerm] = useState("")

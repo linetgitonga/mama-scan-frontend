@@ -1,17 +1,17 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Textarea } from "@/components/ui/textarea"
-import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../components/ui/card"
+import { Button } from "../../../components/ui/button"
+import { Input } from "../../../components/ui/input"
+import { Label } from "../../../components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../components/ui/select"
+import { Checkbox } from "../../../components/ui/checkbox"
+import { RadioGroup, RadioGroupItem } from "../../../components/ui/radio-group"
+import { Textarea } from "../../../components/ui/textarea"
+import { Badge } from "../../../components/ui/badge"
+import { Progress } from "../../../components/ui/progress"
+import { Alert, AlertDescription } from "../../../components/ui/alert"
 import {
   ArrowLeft,
   ArrowRight,
@@ -24,8 +24,8 @@ import {
   Heart,
   Shield,
 } from "lucide-react"
-import { useAuth } from "@/hooks/useAuth"
-import { apiClient, type Patient, type RiskPrediction } from "@/lib/api"
+import { useAuth } from "../../../hooks/useAuth"
+import { apiClient, type Patient, type RiskPrediction } from "../../../lib/api"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 

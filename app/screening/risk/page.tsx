@@ -1,12 +1,12 @@
 "use client"
 
 import { useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../components/ui/card"
+import { Button } from "../../../components/ui/button"
+import { Badge } from "../../../components/ui/badge"
+import { Progress } from "../../../components/ui/progress"
 import { Brain, TrendingUp, AlertTriangle, CheckCircle, Info, BarChart3, Activity, Shield, Heart } from "lucide-react"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Alert, AlertDescription } from "../../../components/ui/alert"
 
 export default function RiskAssessmentPage() {
   const [selectedTimeframe, setSelectedTimeframe] = useState("month")
