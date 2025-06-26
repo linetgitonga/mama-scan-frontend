@@ -10,8 +10,8 @@ const nextConfig = {
     unoptimized: true,
   },
   output: 'standalone', 
-  distDir: '.next',  
-  trailingSlash: true,
+  // distDir: '.next',  
+  // trailingSlash: true,
 }
 
 export default nextConfig
