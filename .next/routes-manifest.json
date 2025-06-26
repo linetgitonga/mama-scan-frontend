@@ -1,0 +1,139 @@
+{
+  "version": 3,
+  "pages404": true,
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "dynamicRoutes": [],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/analytics",
+      "regex": "^/analytics(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/analytics(?:/)?$"
+    },
+    {
+      "page": "/dashboard",
+      "regex": "^/dashboard(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard(?:/)?$"
+    },
+    {
+      "page": "/landing",
+      "regex": "^/landing(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/landing(?:/)?$"
+    },
+    {
+      "page": "/login",
+      "regex": "^/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/login(?:/)?$"
+    },
+    {
+      "page": "/notifications",
+      "regex": "^/notifications(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/notifications(?:/)?$"
+    },
+    {
+      "page": "/patients",
+      "regex": "^/patients(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/patients(?:/)?$"
+    },
+    {
+      "page": "/patients/new",
+      "regex": "^/patients/new(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/patients/new(?:/)?$"
+    },
+    {
+      "page": "/profile",
+      "regex": "^/profile(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/profile(?:/)?$"
+    },
+    {
+      "page": "/referrals",
+      "regex": "^/referrals(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/referrals(?:/)?$"
+    },
+    {
+      "page": "/referrals/completed",
+      "regex": "^/referrals/completed(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/referrals/completed(?:/)?$"
+    },
+    {
+      "page": "/referrals/pending",
+      "regex": "^/referrals/pending(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/referrals/pending(?:/)?$"
+    },
+    {
+      "page": "/resources/training",
+      "regex": "^/resources/training(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/resources/training(?:/)?$"
+    },
+    {
+      "page": "/screening/history",
+      "regex": "^/screening/history(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/screening/history(?:/)?$"
+    },
+    {
+      "page": "/screening/new",
+      "regex": "^/screening/new(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/screening/new(?:/)?$"
+    },
+    {
+      "page": "/screening/risk",
+      "regex": "^/screening/risk(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/screening/risk(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "RSC",
+    "varyHeader": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch",
+    "prefetchHeader": "Next-Router-Prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSuffix": ".prefetch.rsc",
+    "prefetchSegmentHeader": "Next-Router-Segment-Prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments"
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  },
+  "rewrites": []
+}

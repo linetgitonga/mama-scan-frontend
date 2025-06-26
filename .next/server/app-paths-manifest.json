@@ -1,0 +1,19 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/analytics/page": "app/analytics/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/landing/page": "app/landing/page.js",
+  "/notifications/page": "app/notifications/page.js",
+  "/login/page": "app/login/page.js",
+  "/page": "app/page.js",
+  "/patients/new/page": "app/patients/new/page.js",
+  "/profile/page": "app/profile/page.js",
+  "/patients/page": "app/patients/page.js",
+  "/referrals/completed/page": "app/referrals/completed/page.js",
+  "/referrals/page": "app/referrals/page.js",
+  "/referrals/pending/page": "app/referrals/pending/page.js",
+  "/resources/training/page": "app/resources/training/page.js",
+  "/screening/history/page": "app/screening/history/page.js",
+  "/screening/new/page": "app/screening/new/page.js",
+  "/screening/risk/page": "app/screening/risk/page.js"
+}
