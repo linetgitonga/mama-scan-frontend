@@ -1,9 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "../../components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card"
-import { Badge } from "../../components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 import {
   Activity,
   Shield,
@@ -22,7 +22,7 @@ import {
   X,
 } from "lucide-react"
 import Link from "next/link"
-import { ThemeToggle } from "../../components/theme-toggle"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export default function LandingPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -217,12 +217,12 @@ export default function LandingPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in">
               <Link href="/dashboard">
-                <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-lg text-white dark:text-white px-8">
+                <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-lg px-8">
                   Start Screening
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
-              <Button size="lg" variant="outline" className="text-lg px-8 text-white bg-pink-300">
+              <Button size="lg" variant="outline" className="text-lg px-8">
                 Watch Demo
               </Button>
             </div>
@@ -251,7 +251,7 @@ export default function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 bg-slate-50 dark:bg-slate-900">
+      <section id="features" className="py-20 bg-slate-50 dark:bg-slate-800">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white mb-4">
@@ -268,10 +268,10 @@ export default function LandingPage() {
                 <Card key={index} className="feature-card hover:shadow-lg transition-shadow">
                   <CardHeader>
                     <Icon className={`h-12 w-12 ${feature.color} mb-4`} />
-                    <CardTitle className="text-xl text-blue-900 dark:text-white ">{feature.title}</CardTitle>
+                    <CardTitle className="text-xl">{feature.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <CardDescription className="text-base text-slate-800 dark:text-white ">{feature.description}</CardDescription>
+                    <CardDescription className="text-base">{feature.description}</CardDescription>
                   </CardContent>
                 </Card>
               )
@@ -281,7 +281,7 @@ export default function LandingPage() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-slate-50 dark:bg-slate-900">
+      <section id="about" className="py-20 bg-white dark:bg-slate-900">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -358,7 +358,7 @@ export default function LandingPage() {
       </section>
 
       {/* Testimonials Section */}
-      <section id="testimonials" className="py-20 bg-slate-50 dark:bg-slate-900">
+      <section id="testimonials" className="py-20 bg-slate-50 dark:bg-slate-800">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white mb-4">
@@ -390,7 +390,7 @@ export default function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-blue-500 dark:bg-blue-800">
+      <section className="py-20 bg-blue-600 dark:bg-blue-800">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
             Ready to Transform Healthcare in Your Community?
@@ -400,7 +400,7 @@ export default function LandingPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/dashboard">
-              <Button size="lg" variant="secondary" className="text-lg px-8 text-white hover:bg-slate-200 hover:text-slate-800 bg-pink-300">
+              <Button size="lg" variant="secondary" className="text-lg px-8">
                 Get Started Today
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
@@ -408,7 +408,7 @@ export default function LandingPage() {
             <Button
               size="lg"
               variant="outline"
-              className="text-lg px-8 text-white bg-slate-800 hover:bg-white hover:text-slate-200 dark:bg-slate-800 border-white dark:hover:bg-white hover:text-blue-600"
+              className="text-lg px-8 text-white border-white hover:bg-white hover:text-blue-600"
             >
               Schedule Demo
             </Button>
@@ -417,7 +417,7 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-blue-500 dark:bg-slate-900 text-white py-12">
+      <footer className="bg-slate-900 text-white py-12">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
@@ -427,15 +427,15 @@ export default function LandingPage() {
                 </div>
                 <span className="text-xl font-bold">MAMA-SCAN</span>
               </div>
-              <p className="text-slate-200 mb-4">AI-powered cervical cancer screening for Kenya's healthcare system.</p>
+              <p className="text-slate-400 mb-4">AI-powered cervical cancer screening for Kenya's healthcare system.</p>
               <div className="flex space-x-4">
                 <Globe className="h-5 w-5 text-slate-400" />
-                <span className="text-slate-200">Kenya & East Africa</span>
+                <span className="text-slate-400">Kenya & East Africa</span>
               </div>
             </div>
             <div>
               <h3 className="font-semibold mb-4">Product</h3>
-              <ul className="space-y-2 text-slate-200">
+              <ul className="space-y-2 text-slate-400">
                 <li>
                   <a href="#features" className="hover:text-white">
                     Features
@@ -460,7 +460,7 @@ export default function LandingPage() {
             </div>
             <div>
               <h3 className="font-semibold mb-4">Company</h3>
-              <ul className="space-y-2 text-slate-200">
+              <ul className="space-y-2 text-slate-400">
                 <li>
                   <a href="#about" className="hover:text-white">
                     About
@@ -485,7 +485,7 @@ export default function LandingPage() {
             </div>
             <div>
               <h3 className="font-semibold mb-4">Support</h3>
-              <ul className="space-y-2 text-slate-200">
+              <ul className="space-y-2 text-slate-400">
                 <li>
                   <a href="#" className="hover:text-white">
                     Help Center
@@ -509,7 +509,7 @@ export default function LandingPage() {
               </ul>
             </div>
           </div>
-          <div className="border-t border-slate-800 mt-8 pt-8 text-center text-slate-200">
+          <div className="border-t border-slate-800 mt-8 pt-8 text-center text-slate-400">
             <p>&copy; 2024 MAMA-SCAN. All rights reserved. Built for Kenya's healthcare transformation.</p>
           </div>
         </div>

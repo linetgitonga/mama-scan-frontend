@@ -81,7 +81,7 @@ export default function Dashboard() {
   const todayScreenings = screenings.filter(
     (s) => new Date(s.screening_date).toDateString() === new Date().toDateString(),
   ).length
-  const highRiskCases = screenings.filter((s) => s.risk_level === "High").length
+  const highRiskCases = screenings.filter((s) => s.risk_level === "High Risk").length
   const pendingReferrals = screenings.filter((s) => s.referral_needed && !s.risk_level).length
 
   const stats = [

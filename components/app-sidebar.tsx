@@ -25,6 +25,8 @@ import {
   Mail,
   ChevronDown,
   ChevronRight,
+  Icon,
+
 } from "lucide-react"
 
 import { useAuth } from "../hooks/useAuth"
@@ -121,6 +123,11 @@ const navigationData = {
           title: "All Referrals",
           url: "/referrals",
           icon: TrendingUp,
+        },
+        {
+          title: "Create New Referral",
+          url: "/referrals/new",
+          icon: Plus,
         },
         {
           title: "Pending",
@@ -428,6 +435,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     {/* Add notification badge if needed */}
                   </Link>
                 </DropdownMenuItem>
+
+                  <DropdownMenuItem asChild>
+                  <Link href="/chatbot" className="cursor-pointer">
+                    <Brain className="mr-2 h-4 w-4" />
+                    Chatbot
+                    {/* Add notification badge if needed */}
+                  </Link>
+                </DropdownMenuItem>
+
+
+
+
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-600 dark:text-red-400">
                   <LogOut className="mr-2 h-4 w-4" />

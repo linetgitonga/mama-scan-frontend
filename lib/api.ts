@@ -5,7 +5,7 @@ export interface User {
   id: number
   email: string
   username: string
-  user_type: "CHV" | "CLINICIAN" | "ADMIN"
+  user_type: "CHV" | "CLINICIAN" | "ADMIN" | "PATIENT" | "SPECIALIST"
   phone_number?: string
   county?: string
   sub_county?: string
@@ -13,6 +13,7 @@ export interface User {
   is_active: boolean
   created_at: string
   updated_at: string
+
 }
 
 export interface Patient {
@@ -78,14 +79,44 @@ export interface ScreeningFollowUp {
   created_at: string
   updated_at: string
 }
-export interface LoginResponse {
-    message: string;
-    user: User;
-    tokens: {
-      refresh: string;
-      access: string;
-    };
-  }
+
+// Payment types
+export interface PaymentRequest {
+  amount: number
+  service_id: number
+  phone_number: string
+}
+
+export interface PaymentResponse {
+  success: boolean
+  payment_link: string
+  transaction_id: string
+}
+
+export interface PaymentStatus {
+  transaction_id: string
+  status: "PENDING" | "COMPLETED" | "FAILED" | "CANCELLED"
+  amount: number
+  service: string
+  created_at?: string
+  updated_at?: string
+}
+
+export interface PaymentCallback {
+  transaction_id: string
+  status: "COMPLETED" | "FAILED"
+  amount: number
+  signature: string
+}
+
+// Chatbot types
+export interface ChatRequest {
+  query: string
+}
+
+export interface ChatResponse {
+  answer: string
+}
 
 // API Client class
 class ApiClient {
@@ -115,18 +146,10 @@ class ApiClient {
         headers,
       })
 
-      // if (!response.ok) {
-      //   if (response.status === 401) {
-      //     console.warn("Unauthorized request, clearing token and redirecting to login")
-      //     // Clear token and redirect to login page
-      //     this.clearToken()
-      //     if (typeof window !== "undefined") {
-      //       window.location.href = "/login"
-      //     }
-      //   }
-      //   const errorData = await response.json().catch(() => ({}))
-      //   throw new Error(errorData.message || `HTTP error! status: ${response.status}`)
-      // }
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.message || `HTTP error! status: ${response.status}`)
+      }
 
       return await response.json()
     } catch (error) {
@@ -158,7 +181,8 @@ class ApiClient {
   //   this.setToken(response.access)
   //   return response
   // }
-async login(email: string, password: string) {
+
+  async login(email: string, password: string) {
   try {
     // Create a clean request without any existing auth headers
     const response = await fetch(`${this.baseURL}/auth/login/`, {
@@ -188,9 +212,6 @@ async login(email: string, password: string) {
   }
 }
 
-  
-
-
 
   async register(userData: {
     email: string
@@ -215,6 +236,7 @@ async login(email: string, password: string) {
   async getProfile() {
     return this.request<User>("/auth/profile/")
   }
+// ...existing code...
 
   async updateProfile(userData: Partial<User>) {
     return this.request<User>("/auth/profile/update/", {
@@ -222,6 +244,11 @@ async login(email: string, password: string) {
       body: JSON.stringify(userData),
     })
   }
+
+  // Fetch specialists (users with user_type "SPECIALIST")
+async getSpecialists() {
+  return this.request<{ results: User[] }>("/auth/specialists/")
+}
 
   // Patient endpoints
   async getPatients(search?: string) {
@@ -309,6 +336,33 @@ async login(email: string, password: string) {
     })
   }
 
+  // Payment endpoints
+  async initiatePayment(paymentData: PaymentRequest) {
+    return this.request<PaymentResponse>("/payments/initiate-payment/", {
+      method: "POST",
+      body: JSON.stringify(paymentData),
+    })
+  }
+
+  async getPaymentStatus(transactionId: string) {
+    return this.request<PaymentStatus>(`/payments/payment-status/${transactionId}/`)
+  }
+
+  async handlePaymentCallback(callbackData: PaymentCallback) {
+    return this.request<{ success: boolean; message: string }>("/payments/payment-callback/", {
+      method: "POST",
+      body: JSON.stringify(callbackData),
+    })
+  }
+
+  // Chatbot endpoint
+  async sendChatMessage(query: string) {
+    return this.request<ChatResponse>("/chatbot/chat/", {
+      method: "POST",
+      body: JSON.stringify({ query }),
+    })
+  }
+
   // Analytics endpoints
   async getAnalytics() {
     return this.request("/analytics/")
@@ -334,5 +388,9 @@ async login(email: string, password: string) {
     return this.request("/analytics/export/")
   }
 }
+
+
+
+// ...existing code...
 
 export const apiClient = new ApiClient(BASE_URL)

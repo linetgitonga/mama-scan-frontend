@@ -93,9 +93,9 @@ export default function ScreeningHistoryPage() {
 
   const stats = {
     total: screenings.length,
-    highRisk: screenings.filter((s) => s.risk_level === "High").length,
-    moderate: screenings.filter((s) => s.risk_level === "Moderate").length,
-    low: screenings.filter((s) => s.risk_level === "Low").length,
+    highRisk: screenings.filter((s) => s.risk_level === "HIGH").length,
+    moderate: screenings.filter((s) => s.risk_level === "MODERATE").length,
+    low: screenings.filter((s) => s.risk_level === "LOW").length,
   }
 
   if (isLoading) {

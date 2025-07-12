@@ -81,8 +81,8 @@ export default function Dashboard() {
   const todayScreenings = screenings.filter(
     (s) => new Date(s.screening_date).toDateString() === new Date().toDateString(),
   ).length
-  const highRiskCases = screenings.filter((s) => s.risk_level === "High").length
-  const pendingReferrals = screenings.filter((s) => s.referral_needed && !s.risk_level).length
+  const highRiskCases = screenings.filter((s) => s.risk_level === "HIGH").length
+  const pendingReferrals = screenings.filter((s) => s.referral_needed && (!s.risk_level || s.risk_level === "HIGH")).length
 
   const stats = [
     {
@@ -147,6 +147,28 @@ export default function Dashboard() {
         return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200"
     }
   }
+
+const monthlyTargets = {
+  screenings: 200,
+  highRisk: 50,
+  referrals: 47,
+}
+
+// Get current month/year
+const now = new Date()
+const currentMonth = now.getMonth()
+const currentYear = now.getFullYear()
+
+// Filter screenings for current month
+const monthlyScreenings = screenings.filter((s) => {
+  const date = new Date(s.screening_date)
+  return date.getMonth() === currentMonth && date.getFullYear() === currentYear
+})
+
+const screeningsCompleted = monthlyScreenings.length
+const highRiskIdentified = monthlyScreenings.filter((s) => s.risk_level === "HIGH").length
+const referralsCompleted = monthlyScreenings.filter((s) => s.referral_needed).length
+
 
   return (
     <div className="min-h-screen mybackground">
@@ -305,7 +327,7 @@ export default function Dashboard() {
           {/* Quick Stats & Actions */}
           <div className="space-y-6">
             {/* Screening Progress */}
-            <Card>
+            {/* <Card>
               <CardHeader>
                 <CardTitle className="text-lg">Monthly Progress</CardTitle>
                 <CardDescription>Screening targets for January 2024</CardDescription>
@@ -333,7 +355,48 @@ export default function Dashboard() {
                   <Progress value={74} className="h-2" />
                 </div>
               </CardContent>
-            </Card>
+            </Card> */}
+
+            
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Monthly Progress</CardTitle>
+                  <CardDescription>
+                    Screening targets for {now.toLocaleString("default", { month: "long", year: "numeric" })}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <div className="flex justify-between text-sm mb-2">
+                      <span>Screenings Completed</span>
+                      <span>
+                        {screeningsCompleted}/{monthlyTargets.screenings}
+                      </span>
+                    </div>
+                    <Progress value={Math.round((screeningsCompleted / monthlyTargets.screenings) * 100)} className="h-2" />
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-sm mb-2">
+                      <span>High-Risk Identified</span>
+                      <span>
+                        {highRiskIdentified}/{monthlyTargets.highRisk}
+                      </span>
+                    </div>
+                    <Progress value={Math.round((highRiskIdentified / monthlyTargets.highRisk) * 100)} className="h-2" />
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-sm mb-2">
+                      <span>Referrals Completed</span>
+                      <span>
+                        {referralsCompleted}/{monthlyTargets.referrals}
+                      </span>
+                    </div>
+                    <Progress value={Math.round((referralsCompleted / monthlyTargets.referrals) * 100)} className="h-2" />
+                  </div>
+                </CardContent>
+              </Card>
+
 
             {/* Quick Actions */}
             <Card>

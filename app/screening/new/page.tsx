@@ -623,10 +623,13 @@ export default function NewScreening() {
                 </Button>
               </Link>
               {riskPrediction.referral_needed && (
-                <Button variant="outline" className="flex-1" size="lg">
-                  <AlertTriangle className="h-4 w-4 mr-2" />
-                  Create Referral
-                </Button>
+                <Link href={`/referrals/new?patientId=${selectedPatient?.id}`} className="flex-1">
+                  <Button variant="outline" className="w-full" size="lg">
+                    <AlertTriangle className="h-4 w-4 mr-2" />
+                    Create Referral
+                  </Button>
+                </Link>
+                
               )}
               <Link href="/screening/new" className="flex-1">
                 <Button variant="outline" className="w-full" size="lg">
