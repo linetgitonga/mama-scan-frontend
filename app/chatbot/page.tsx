@@ -22,11 +22,7 @@ const suggestedQuestions = [
   "What vaccines are recommended for children?",
   "What are the symptoms of cervical cancer?",
   "How often should I get screened?",
-  "What is HPV and how is it transmitted?",
-  "What are the risk factors for cervical cancer?",
-  "How can I prevent cervical cancer?",
-  "What should I expect during a screening?",
-  "When should I start getting screened?",
+  "What is HPV and how is it transmitted?"
 ]
 
 export default function ChatbotPage() {

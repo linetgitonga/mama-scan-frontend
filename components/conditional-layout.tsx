@@ -9,7 +9,7 @@ interface ConditionalLayoutProps {
 }
 
 // Pages that should NOT have the sidebar
-const PUBLIC_PAGES = ["/landing", "/login", "/register", "/forgot-password", "/reset-password"]
+const PUBLIC_PAGES = ["/landing", "/login", "/register", "/forgot-password", "/reset-password", "/users",]
 
 export function ConditionalLayout({ children }: ConditionalLayoutProps) {
   const pathname = usePathname()

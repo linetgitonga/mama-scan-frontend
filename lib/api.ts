@@ -16,21 +16,42 @@ export interface User {
 
 }
 
+
+
 export interface Patient {
   id: number
+  user: number | null
   first_name: string
   last_name: string
-  national_id: string
-  phone_number: string
-  email?: string
   date_of_birth: string
+  phone_number: string
+  email: string | null
+  national_id: string
   county: string
   sub_county: string
-  marital_status?: string
+  location: string
+  marital_status: "SINGLE" | "MARRIED" | "DIVORCED" | "WIDOWED"
   registered_by: number
   created_at: string
   updated_at: string
+  age: number
 }
+
+// export interface Patient {
+//   id: number
+//   first_name: string
+//   last_name: string
+//   national_id: string
+//   phone_number: string
+//   email?: string
+//   date_of_birth: string
+//   county: string
+//   sub_county: string
+//   marital_status?: string
+//   registered_by: number
+//   created_at: string
+//   updated_at: string
+// }
 
 export interface ScreeningRecord {
   id: number
@@ -251,21 +272,34 @@ async getSpecialists() {
 }
 
   // Patient endpoints
+  // async getPatients(search?: string) {
+  //   const params = search ? `?search=${encodeURIComponent(search)}` : ""
+  //   return this.request<{ results: Patient[] }>(`/screening/patients/${params}`)
+  // }
   async getPatients(search?: string) {
     const params = search ? `?search=${encodeURIComponent(search)}` : ""
-    return this.request<{ results: Patient[] }>(`/screening/patients/${params}`)
+    return this.request<Patient[]>(`/screening/patients/${params}`)
   }
+
 
   async getPatient(id: number) {
     return this.request<Patient>(`/screening/patients/${id}/`)
   }
 
-  async createPatient(patientData: Omit<Patient, "id" | "created_at" | "updated_at" | "registered_by">) {
-    return this.request<Patient>("/screening/patients/", {
-      method: "POST",
-      body: JSON.stringify(patientData),
-    })
-  }
+  // async createPatient(patientData: Omit<Patient, "id" | "created_at" | "updated_at" | "registered_by">) {
+  //   return this.request<Patient>("/screening/patients/", {
+  //     method: "POST",
+  //     body: JSON.stringify(patientData),
+  //   })
+  // }
+  async createPatient(
+  patientData: Omit<Patient, "id" | "created_at" | "updated_at" | "registered_by" | "age" | "user">,
+) {
+  return this.request<Patient>("/screening/patients/", {
+    method: "POST",
+    body: JSON.stringify(patientData),
+  })
+}
 
   async updatePatient(id: number, patientData: Partial<Patient>) {
     return this.request<Patient>(`/screening/patients/${id}/`, {
