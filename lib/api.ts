@@ -1,4 +1,5 @@
-const BASE_URL = "http://127.0.0.1:8000/api"
+// const BASE_URL = "http://127.0.0.1:8000/api"
+const BASE_URL = "https://mamascan-backend.onrender.com/api"
 
 // Types based on your API documentation
 export interface User {
