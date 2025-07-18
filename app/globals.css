@@ -4,50 +4,60 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%; /* Pure white background for light theme */
-    --foreground: 200 50% 20%; /* Darker blue-gray for text, high contrast */
-    --card: 195 20% 98%; /* Light blue for cards, subtle sky blue tint */
-    --card-foreground: 200 50% 20%; /* Matches foreground for consistency */
-    --popover: 195 20% 98%; /* Matches card for popovers */
-    --popover-foreground: 200 50% 20%; /* Consistent with foreground */
-    --primary: 200 60% 60%; /* Light sky blue for primary elements */
-    --primary-foreground: 0 0% 98%; /* Near-white for text on primary */
-    --secondary: 205 30% 90%; /* Softer light blue for secondary elements */
-    --secondary-foreground: 200 50% 20%; /* Matches foreground */
-    --muted: 205 20% 94%; /* Very subtle light blue for muted backgrounds */
-    --muted-foreground: 200 20% 40%; /* Slightly lighter for muted text */
-    --accent: 200 40% 85%; /* Light blue accent, slightly softer */
-    --accent-foreground: 200 50% 20%; /* Matches foreground */
-    --destructive: 0 70% 65%; /* Soft red for destructive actions */
-    --destructive-foreground: 0 0% 98%; /* Near-white for contrast */
-    --border: 200 15% 90%; /* Very light blue-gray for borders */
-    --input: 200 15% 90%; /* Matches border for inputs */
-    --ring: 200 60% 60%; /* Matches primary for focus rings */
-    --pink: 330 70% 65%; /* Soft pink for accents */
-    --radius: 0.5rem; /* Unchanged, good default */
+    /* Light Theme - Healthcare Professional */
+    --background: 0 0% 99%; /* Slightly off-white for reduced eye strain */
+    --foreground: 210 20% 15%; /* Deep blue-gray for readability */
+    
+    --card: 0 0% 100%; /* Pure white cards */
+    --card-foreground: 210 20% 15%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 20% 15%;
+    
+    --primary: 200 85% 60%; /* Vibrant medical blue */
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 200 20% 96%; /* Very light blue-gray */
+    --secondary-foreground: 210 20% 15%;
+    
+    --muted: 200 15% 95%;
+    --muted-foreground: 200 10% 45%;
+    
+    --accent: 330 85% 70%; /* Medical alert pink */
+    --accent-foreground: 0 0% 100%;
+    
+    --destructive: 0 85% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --border: 200 15% 90%;
+    --input: 200 15% 95%;
+    --ring: 200 85% 60%;
+    
+    --radius: 0.5rem;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 207 90% 65%; /* Consistent lighter blue */
-    --primary-foreground: 222.2 84% 4.9%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 94.1%;
-    --pink: 330 70% 60%; /* Darker pink for dark mode */
+    /* Dark Theme - Clinical Dashboard */
+    --background: 210 15% 8%; /* Deep navy base */
+    --foreground: 0 0% 95%;
+    
+    --card: 210 15% 10%;
+    --card-foreground: 0 0% 95%;
+    
+    --primary: 200 85% 65%; /* Brighter blue for contrast */
+    --primary-foreground: 210 15% 8%;
+    
+    --secondary: 210 15% 15%;
+    --secondary-foreground: 0 0% 95%;
+    
+    --muted: 210 10% 20%;
+    --muted-foreground: 210 10% 65%;
+    
+    --accent: 330 85% 65%; /* Softer pink */
+    --accent-foreground: 0 0% 100%;
+    
+    --border: 210 10% 20%;
+    --input: 210 10% 20%;
+    --ring: 200 85% 65%;
   }
 }
 
@@ -56,186 +66,154 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
   }
 }
 
-/* Hero section with light blue gradient */
+@layer components {
+  /* Enhanced Cards */
+  .card {
+    @apply bg-card text-card-foreground rounded-xl border shadow-sm overflow-hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .card:hover {
+    @apply shadow-md;
+    transform: translateY(-2px);
+  }
+
+  /* Medical Alert Card */
+  .card-alert {
+    @apply border-accent/30 bg-accent/5;
+  }
+
+  /* Gradient Cards */
+  .card-gradient {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--card)) 0%,
+      hsl(var(--primary)/0.03) 100%
+    );
+  }
+
+  /* Buttons */
+  .btn {
+    @apply rounded-lg px-5 py-2.5 font-medium transition-all;
+  }
+  
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90;
+    box-shadow: 0 2px 8px hsl(var(--primary)/0.3);
+  }
+  
+  .btn-accent {
+    @apply bg-accent text-accent-foreground hover:bg-accent/90;
+  }
+
+  /* Inputs */
+  .input {
+    @apply rounded-lg border bg-input px-4 py-2.5 focus:ring-2 focus:ring-ring;
+  }
+
+  /* Badges */
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium;
+  }
+  
+  .badge-accent {
+    @apply bg-accent/10 text-accent;
+  }
+
+  /* Special Health Indicators */
+  .indicator-critical {
+    @apply bg-destructive/10 text-destructive animate-pulse;
+  }
+  
+  .indicator-warning {
+    @apply bg-yellow-500/10 text-yellow-600 dark:text-yellow-400;
+  }
+}
+
+@layer utilities {
+  /* Healthcare-specific */
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .highlight {
+    @apply bg-primary/10 text-primary px-1 rounded;
+  }
+
+  /* Animations */
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  /* Scrollbar */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--primary)) hsl(var(--background));
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar {
+    @apply w-2;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-primary/30 rounded-full;
+  }
+}
+
+/* Hero Section */
 .hero-gradient {
-  background: linear-gradient(135deg, hsl(195 20% 98%) 0%, hsl(200 30% 95%) 25%, hsl(200 40% 90%) 50%, hsl(201, 91%, 77%) 75%, hsl(200, 77%, 57%) 100%);
+  background: linear-gradient(
+    135deg,
+    hsl(var(--background)) 0%,
+    hsl(var(--primary)/0.05) 50%,
+    hsl(var(--primary)/0.1) 100%
+  );
 }
 
 .dark .hero-gradient {
-  background: linear-gradient(135deg, hsl(223, 64%, 11%)  0%, hsl(223, 64%, 11%) 100%);
+  background: linear-gradient(
+    135deg,
+    hsl(var(--background)) 0%,
+    hsl(var(--primary)/0.05) 50%,
+    hsl(var(--primary)/0.08) 100%
+  );
 }
 
-/* Card with light blue and subtle pink accent */
-.card-gradient {
-  background: linear-gradient(135deg, hsl(223, 64%, 11%)  0%, hsl(223, 64%, 11%) 100%);
-  border: 1px solid hsl(var(--border));
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+/* Data Visualization Colors */
+.bg-diag-normal {
+  @apply bg-green-500/10 text-green-600 dark:text-green-400;
 }
 
-
-.feature-card {
-  background: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--primary) / 0.1) 100%);
-  border: 1px solid hsl(var(--pink) / 0.15); /* Pink border for flair */
-  transition: all 0.3s ease;
-}
-.dark .card-gradient {
-  background: linear-gradient(135deg, hsl(223, 64%, 11%)  0%, hsl(223, 64%, 11%) 100%);
+.bg-diag-warning {
+  @apply bg-yellow-500/10 text-yellow-600 dark:text-yellow-400;
 }
 
-.feature-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px hsl(var(--pink) / 0.1);
-}
-.dark .feature-card {
-  background: linear-gradient(135deg, hsl(223, 64%, 11%)  0%, hsl(223, 64%, 11%) 100%);
-  border: 1px solid hsl(var(--pink) / 0.2);
+.bg-diag-critical {
+  @apply bg-red-500/10 text-red-600 dark:text-red-400;
 }
 
-.stat-card {
-  background: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--secondary) / 0.3) 100%);
-  border: 1px solid hsl(var(--border));
-  transition: all 0.3s ease;
-}
-.dark .stat-card {
-  background: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--secondary) / 0.4) 100%);
-  border: 1px solid hsl(var(--border));
-}
-
-.stat-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px hsl(var(--pink) / 0.1);
-}
-
-.dark .stat-card:hover {
-  box-shadow: 0 6px 15px hsl(var(--pink) / 0.2);
-}
-
-/* Pink accent elements */
-.btn-pink {
-  background: linear-gradient(135deg, hsl(var(--pink)) 0%, hsl(var(--pink) / 0.8) 100%);
-  color: white;
-  transition: all 0.3s ease;
-}
-
-.btn-pink:hover {
-  background: linear-gradient(135deg, hsl(var(--pink) / 0.9) 0%, hsl(var(--pink) / 0.7) 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px hsl(var(--pink) / 0.3);
-}
-
-.badge-pink {
-  background: linear-gradient(135deg, hsl(var(--pink)) 0%, hsl(var(--pink) / 0.8) 100%);
-  color: white;
-}
-
-.text-pink {
-  color: hsl(var(--pink));
-}
-
-.border-pink {
-  border-color: hsl(var(--pink));
-}
-
-.bg-pink-50 {
-  background-color: hsl(var(--pink) / 0.05);
-}
-
-/* Enhanced primary button */
-.btn-primary {
-  background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.9) 100%);
-  color: hsl(var(--primary-foreground));
-  border: none;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 6px hsl(var(--primary) / 0.2);
-}
-
-.btn-primary:hover {
-  background: linear-gradient(135deg, hsl(var(--primary) / 0.95) 0%, hsl(var(--primary) / 0.85) 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px hsl(var(--primary) / 0.3);
-}
-
-/* Pink alert variant */
-.alert-pink {
-  background: linear-gradient(135deg, hsl(var(--pink) / 0.1) 0%, hsl(var(--pink) / 0.05) 100%);
-  border: 1px solid hsl(var(--pink) / 0.3);
-  color: hsl(var(--pink) / 0.9);
-}
-
-.dark .alert-pink {
-  background: linear-gradient(135deg, hsl(var(--pink) / 0.2) 0%, hsl(var(--pink) / 0.15) 100%);
-  border: 1px solid hsl(var(--pink) / 0.4);
-  color: hsl(var(--pink) / 0.9);
-}
-
-/* Pink accent border for active nav items */
-.active-nav-item {
-  border-left: 3px solid hsl(var(--pink));
-  background: hsl(var(--pink) / 0.05);
-}
-
-/* Pink hover effects */
-.hover-pink:hover {
-  color: hsl(var(--pink));
-}
-
-.hover-bg-pink:hover {
-  background: hsl(var(--pink) / 0.1);
-}
-
-/* Enhanced input focus with pink option */
-.input-primary:focus {
-  border-color: hsl(var(--primary));
-  box-shadow: 0 0 0 2px hsl(var(--primary) / 0.2);
-}
-
-.input-pink:focus {
-  border-color: hsl(var(--pink));
-  box-shadow: 0 0 0 2px hsl(var(--pink) / 0.2);
-}
-
-/* Pink gradient card */
-.card-pink-gradient {
-  background: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--pink) / 0.1) 100%);
-  border: 1px solid hsl(var(--pink) / 0.2);
-}
-
-/* Responsive improvements */
-@media (max-width: 768px) {
-  .hero-gradient {
-    padding: 2rem 1rem;
-  }
-
-  .stat-card {
-    padding: 1rem;
-    margin-bottom: 1rem;
+/* Print Styles */
+@media print {
+  .no-print {
+    display: none !important;
   }
   
-  .feature-card {
-    margin-bottom: 1.5rem;
+  body {
+    @apply bg-white text-black;
+    font-size: 12pt;
   }
-}
-
-/* Smoother transitions */
-* {
-  transition: background-color 0.2s ease, border-color 0.2s ease;
-}
-
-/* Better focus states */
-button:focus, a:focus, input:focus {
-  outline: 2px solid hsl(var(--primary) / 0.5);
-  outline-offset: 2px;
-}
-
-/* Enhanced shadows */
-.shadow-soft {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
-.shadow-soft-lg {
-  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  
+  .card {
+    break-inside: avoid;
+  }
 }

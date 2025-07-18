@@ -20,6 +20,7 @@ import {
   Globe,
   Menu,
   X,
+  Check,
 } from "lucide-react"
 import Link from "next/link"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -67,9 +68,58 @@ export default function LandingPage() {
       color: "text-blue-700",
     },
   ]
+ const pricingPlans = [
+  {
+    name: "Community Health",
+    description: "For individual CHVs and small clinics",
+    price: "KSh 300",
+    billingCycle: "month",
+    features: [
+      "5 screenings per month",
+      "Basic AI analysis",
+      "Patient management for up to 50 patients",
+      "Email support",
+      "Community health reports"
+    ],
+    cta: "Start Screening",
+    note: "Free for registered government CHVs"
+  },
+  {
+    name: "Clinic Pro",
+    description: "For private clinics and medium practices",
+    price: "KSh 2,000",
+    billingCycle: "month",
+    features: [
+      "Unlimited screenings",
+      "Advanced AI analysis",
+      "Up to 10 staff accounts",
+      "Priority support",
+      "Detailed analytics dashboard",
+      "HL7/FHIR integration"
+    ],
+    cta: "Get Started",
+    note: "Annual plan saves 15%"
+  },
+  {
+    name: "Enterprise",
+    description: "For hospitals and healthcare networks",
+    price: "Custom",
+    features: [
+      "Unlimited screenings & users",
+      "Premium AI models",
+      "Dedicated account manager",
+      "API access",
+      "Custom integrations",
+      "On-premise deployment options",
+      "Training & certification"
+    ],
+    cta: "Contact Sales",
+    note: "HIPAA/GDPR compliant solutions"
+  }
+]
 
   const stats = [
-    { number: "2,847", label: "Patients Screened", icon: Users },
+    { number: "284", label: "Patients Screened", icon: Users },
     { number: "94.7%", label: "AI Accuracy Rate", icon: Brain },
     { number: "47", label: "Counties Covered", icon: MapPin },
     { number: "156", label: "Healthcare Workers", icon: Heart },
@@ -388,6 +438,76 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+
+
+    {/* Pricing Section */}
+<section id="pricing" className="py-20 bg-white dark:bg-slate-900">
+  <div className="container mx-auto px-4">
+    <div className="text-center mb-16">
+      <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white mb-4">
+        Flexible Pricing Plans
+      </h2>
+      <p className="text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+        Affordable options for individuals, clinics, and healthcare networks
+      </p>
+    </div>
+    
+    <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+      {pricingPlans.map((plan, index) => (
+        <Card 
+          key={index} 
+          className={`feature-card hover:shadow-lg transition-all ${index === 1 ? "border-2 border-primary dark:border-primary scale-[1.02]" : ""}`}
+        >
+          <CardHeader className="pb-4">
+            <h3 className="text-2xl font-bold text-slate-900 dark:text-white">
+              {plan.name}
+              {index === 1 && (
+                <span className="ml-2 bg-primary text-white text-xs px-2 py-1 rounded-full">
+                  POPULAR
+                </span>
+              )}
+            </h3>
+            <p className="text-muted-foreground">{plan.description}</p>
+          </CardHeader>
+          
+          <CardContent className="pt-0">
+            <div className="mb-6">
+              <span className="text-4xl font-bold text-slate-900 dark:text-white">
+                {plan.price}
+              </span>
+              {plan.billingCycle && (
+                <span className="text-sm text-muted-foreground">/{plan.billingCycle}</span>
+              )}
+            </div>
+            
+            <ul className="space-y-3 mb-8">
+              {plan.features.map((feature, i) => (
+                <li key={i} className="flex items-center">
+                  <Check className="h-5 w-5 text-green-500 mr-2" />
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+            
+            <Button 
+              className={`w-full ${index === 1 ? "bg-primary hover:bg-primary/90" : "bg-secondary hover:bg-secondary/80"}`}
+            >
+              {plan.cta}
+            </Button>
+            
+            {plan.note && (
+              <p className="text-xs text-muted-foreground mt-3 text-center">
+                {plan.note}
+              </p>
+            )}
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  </div>
+</section>
+
 
       {/* CTA Section */}
       <section className="py-20 bg-blue-600 dark:bg-blue-800">

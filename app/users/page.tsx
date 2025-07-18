@@ -27,9 +27,9 @@ interface DashboardData {
 
 export default function UserDashboard() {
   const [dashboardData, setDashboardData] = useState<DashboardData>({
-    totalScreenings: 0,
-    nextAppointment: "Not scheduled",
-    riskLevel: "Unknown",
+    totalScreenings: 1,
+    nextAppointment: "26/07/2025",
+    riskLevel: "High",
     followUps: 0,
     recentScreenings: [],
     user: null,

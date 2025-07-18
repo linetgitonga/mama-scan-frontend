@@ -955,39 +955,85 @@ export default function RegisterPage() {
         </div>
 
         {showTerms && (
-          <div className="prose prose-sm dark:prose-invert p-4 border rounded-lg bg-muted/50 max-h-60 overflow-y-auto">
-            <h4>Terms and Conditions</h4>
-            <p>
-              By creating an account on MAMA-SCAN, you agree to the following terms:
-            </p>
-            <ol className="list-decimal pl-5 space-y-2">
-              <li>
-                You are responsible for maintaining the confidentiality of your account and password.
-              </li>
-              <li>
-                You agree to provide accurate and complete information during registration.
-              </li>
-              <li>
-                MAMA-SCAN reserves the right to suspend or terminate your account for violations.
-              </li>
-              <li>
-                All health information provided will be kept confidential in accordance with our 
-                <Link href="/privacy" className="text-primary hover:underline ml-1">
-                  Privacy Policy
-                </Link>.
-              </li>
-              <li>
-                You consent to receive important notifications via email or SMS.
-              </li>
-            </ol>
-            <p className="mt-2 text-sm">
-              By checking this box, you acknowledge that you have read and agree to our 
-              <Link href="/terms" className="text-primary hover:underline ml-1">
-                full Terms of Service
-              </Link>.
-            </p>
-          </div>
-        )}
+  <div className="prose prose-sm dark:prose-invert p-4 border rounded-lg bg-muted/50 max-h-60 overflow-y-auto">
+    <h4 className="font-semibold text-lg">Terms and Conditions</h4>
+    <p className="text-sm">
+      By creating an account on MAMA-SCAN, you agree to the following terms:
+    </p>
+    
+    <h5 className="font-medium mt-3">Data Ownership & Access</h5>
+    <ol className="list-decimal pl-5 space-y-2 text-sm">
+      <li>
+        <strong>Patient Data Rights:</strong> You retain ownership of your health data, but grant MAMA-SCAN 
+        a limited license to process it for service delivery.
+      </li>
+      <li>
+        <strong>Provider Access:</strong> CHVs and Specialists directly involved in your care will have 
+        access to relevant health information as needed for treatment.
+      </li>
+      <li>
+        <strong>Research Use:</strong> De-identified data may be used for medical research purposes. 
+        You may opt-out in your account settings.
+      </li>
+    </ol>
+
+    <h5 className="font-medium mt-3">HIPAA Compliance</h5>
+    <ol className="list-decimal pl-5 space-y-2 text-sm" start={4}>
+      <li>
+        <strong>Confidentiality:</strong> All health professionals using this platform are bound by 
+        HIPAA confidentiality requirements and must maintain discretion with patient information.
+      </li>
+      <li>
+        <strong>Minimum Necessary:</strong> Providers will only access the minimum necessary 
+        information required for your care.
+      </li>
+      <li>
+        <strong>Breach Notification:</strong> We will notify you within 72 hours of any 
+        unauthorized access to your protected health information.
+      </li>
+    </ol>
+
+    <h5 className="font-medium mt-3">AI System Usage</h5>
+    <ol className="list-decimal pl-5 space-y-2 text-sm" start={7}>
+      <li>
+        <strong>Diagnostic Assistance:</strong> Our AI system analyzes your health data to provide 
+        screening suggestions, but all final diagnoses must be confirmed by a qualified healthcare provider.
+      </li>
+      <li>
+        <strong>Data Processing:</strong> By using our services, you consent to having your 
+        de-identified data used to improve our AI algorithms.
+      </li>
+      <li>
+        <strong>Human Oversight:</strong> All AI-generated recommendations will be reviewed by 
+        qualified medical professionals before being acted upon.
+      </li>
+    </ol>
+
+    <div className="mt-4 p-3 bg-muted rounded-lg">
+      <h5 className="font-medium flex items-center gap-2">
+        <Lock className="h-4 w-4" />
+        Your Privacy Rights
+      </h5>
+      <ul className="list-disc pl-5 space-y-1 text-sm mt-2">
+        <li>Request access to your health records at any time</li>
+        <li>Request corrections to inaccurate information</li>
+        <li>Withdraw consent for research use (does not affect treatment)</li>
+      </ul>
+    </div>
+
+    <p className="mt-3 text-xs text-muted-foreground">
+      By checking this box, you acknowledge you've read and agree to our{' '}
+      <Link href="/terms" className="text-primary hover:underline">
+        Full Terms of Service
+      </Link>{' '}
+      and{' '}
+      <Link href="/privacy" className="text-primary hover:underline">
+        Privacy Policy
+      </Link>, 
+      including HIPAA compliance provisions and AI usage terms.
+    </p>
+  </div>
+)}
       </div>
 
               </div>
