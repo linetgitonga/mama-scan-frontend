@@ -535,9 +535,15 @@ import {
   CheckCircle,
   Eye,
   EyeOff,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react"
+import { Checkbox } from "@/components/ui/checkbox"
 
 export default function RegisterPage() {
+  const [showTerms, setShowTerms] = useState(false)
+  const [acceptedTerms, setAcceptedTerms] = useState(false)
+  
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -914,6 +920,78 @@ export default function RegisterPage() {
                 </div>
               </div>
             </div>
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold flex items-center gap-2">
+                <User className="h-5 w-5" />
+                Terms & Conditions
+              </h3>
+               <div className="space-y-2">
+        <div className="flex items-center space-x-2">
+          <Checkbox 
+            id="terms" 
+            checked={acceptedTerms}
+            onCheckedChange={(checked) => setAcceptedTerms(!!checked)}
+          />
+          <Label htmlFor="terms" className="text-sm font-medium leading-none">
+            I agree to the Terms and Conditions
+          </Label>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="text-primary hover:text-primary/80"
+            onClick={() => setShowTerms(!showTerms)}
+          >
+            {showTerms ? (
+              <>
+                Hide <ChevronUp className="ml-1 h-4 w-4" />
+              </>
+            ) : (
+              <>
+                View <ChevronDown className="ml-1 h-4 w-4" />
+              </>
+            )}
+          </Button>
+        </div>
+
+        {showTerms && (
+          <div className="prose prose-sm dark:prose-invert p-4 border rounded-lg bg-muted/50 max-h-60 overflow-y-auto">
+            <h4>Terms and Conditions</h4>
+            <p>
+              By creating an account on MAMA-SCAN, you agree to the following terms:
+            </p>
+            <ol className="list-decimal pl-5 space-y-2">
+              <li>
+                You are responsible for maintaining the confidentiality of your account and password.
+              </li>
+              <li>
+                You agree to provide accurate and complete information during registration.
+              </li>
+              <li>
+                MAMA-SCAN reserves the right to suspend or terminate your account for violations.
+              </li>
+              <li>
+                All health information provided will be kept confidential in accordance with our 
+                <Link href="/privacy" className="text-primary hover:underline ml-1">
+                  Privacy Policy
+                </Link>.
+              </li>
+              <li>
+                You consent to receive important notifications via email or SMS.
+              </li>
+            </ol>
+            <p className="mt-2 text-sm">
+              By checking this box, you acknowledge that you have read and agree to our 
+              <Link href="/terms" className="text-primary hover:underline ml-1">
+                full Terms of Service
+              </Link>.
+            </p>
+          </div>
+        )}
+      </div>
+
+              </div>
+
 
             <Button
               type="submit"
