@@ -1,236 +1,459 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { DashboardLayout } from "@/components/user/dashboard-layout"
-import { StatsCard } from "@/components/user/stats-card"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Activity, Calendar, FileText, AlertTriangle, CheckCircle, Clock, TrendingUp } from "lucide-react"
-import { apiClient } from "@/lib/api"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card"
+import { Button } from "../components/ui/button"
+import { Badge } from "../components/ui/badge"
+import { Progress } from "../components/ui/progress"
+import { Users, UserCheck, AlertTriangle, TrendingUp, MapPin, Activity, Bell, Plus, Search, Filter } from "lucide-react"
+import { Input } from "../components/ui/input"
+import { useAuth } from "../hooks/useAuth"
+import { apiClient, type Patient, type ScreeningRecord } from "../lib/api"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 
-interface DashboardData {
-  totalScreenings: number
-  nextAppointment: string
-  riskLevel: string
-  followUps: number
-  recentScreenings: any[]
-  user: any
-}
+export default function Dashboard() {
+  const [searchTerm, setSearchTerm] = useState("")
+  const [patients, setPatients] = useState<Patient[]>([])
+  const [screenings, setScreenings] = useState<ScreeningRecord[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState("")
 
-export default function UserDashboard() {
-  const [dashboardData, setDashboardData] = useState<DashboardData>({
-    totalScreenings: 0,
-    nextAppointment: "Not scheduled",
-    riskLevel: "Unknown",
-    followUps: 0,
-    recentScreenings: [],
-    user: null,
-  })
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const { user, isLoading: authLoading } = useAuth()
+  const router = useRouter()
 
   useEffect(() => {
-    fetchDashboardData()
-  }, [])
+    if (!authLoading && !user) {
+      router.push("/landing")
+      return
+    }
+
+    if (user) {
+      fetchDashboardData()
+    }
+  }, [user, authLoading, router])
 
   const fetchDashboardData = async () => {
     try {
-      setLoading(true)
+      setIsLoading(true)
+      const [patientsResponse, screeningsResponse] = await Promise.all([
+        apiClient.getPatients(),
+        apiClient.getScreenings(),
+      ])
 
-      // Fetch user profile
-      const userProfile = await apiClient.getProfile()
-
-      // Fetch screenings
-      const screeningsResponse = await apiClient.getScreenings()
-      const screenings = screeningsResponse.results || []
-
-      // Fetch follow-ups
-      const followUpsResponse = await apiClient.getFollowUps()
-      const followUps = followUpsResponse.results || []
-
-      // Calculate stats
-      const totalScreenings = screenings.length
-      const pendingFollowUps = followUps.filter((f: any) => f.status === "SCHEDULED").length
-
-      // Get latest screening for risk level
-      const latestScreening = screenings[0]
-      const riskLevel = latestScreening?.risk_level || "Unknown"
-
-      // Get recent screenings (last 2)
-      const recentScreenings = screenings.slice(0, 2).map((screening: any) => ({
-        id: screening.id,
-        type: "Cervical Cancer Screening",
-        date: screening.screening_date,
-        riskLevel: screening.risk_level || "Unknown",
-        status: "Completed",
-      }))
-
-      setDashboardData({
-        totalScreenings,
-        nextAppointment:
-          followUps.length > 0 ? new Date(followUps[0].follow_up_date).toLocaleDateString() : "Not scheduled",
-        riskLevel,
-        followUps: pendingFollowUps,
-        recentScreenings,
-        user: userProfile,
-      })
-    } catch (err) {
-      setError("Failed to load dashboard data")
-      console.error("Dashboard error:", err)
+      setPatients(patientsResponse.results || [])
+      setScreenings(screeningsResponse.results || [])
+    } catch (error: any) {
+      setError(error.message || "Failed to fetch dashboard data")
+      console.error("Dashboard data fetch error:", error)
     } finally {
-      setLoading(false)
+      setIsLoading(false)
     }
   }
 
-  if (loading) {
+  if (authLoading || isLoading) {
     return (
-      <DashboardLayout>
-        <div className="flex items-center justify-center h-64">
-          <div className="spinner-primary animate-spin rounded-full h-8 w-8 border-b-2"></div>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <Activity className="h-8 w-8 text-primary animate-spin mx-auto mb-4" />
+          <p>Loading dashboard...</p>
         </div>
-      </DashboardLayout>
+      </div>
     )
   }
 
+  if (error) {
+    return (
+      <div className="min-h-screen mybackground flex items-center justify-center">
+        <div className="text-center">
+          <AlertTriangle className="h-8 w-8 text-red-500 mx-auto mb-4" />
+          <p className="text-red-600">{error}</p>
+          <Button onClick={fetchDashboardData} className="mt-4">
+            Retry
+          </Button>
+        </div>
+      </div>
+    )
+  }
+
+  // Calculate stats from real data
+  const totalPatients = patients.length
+  const todayScreenings = screenings.filter(
+    (s) => new Date(s.screening_date).toDateString() === new Date().toDateString(),
+  ).length
+  const highRiskCases = screenings.filter((s) => s.risk_level === "HIGH").length
+  const pendingReferrals = screenings.filter((s) => s.referral_needed && (!s.risk_level || s.risk_level === "HIGH")).length
+
+  const stats = [
+    {
+      title: "Total Patients",
+      value: totalPatients.toString(),
+      change: "+12%",
+      icon: Users,
+      color: "text-blue-600",
+    },
+    {
+      title: "Screened Today",
+      value: todayScreenings.toString(),
+      change: "+5%",
+      icon: UserCheck,
+      color: "text-green-600",
+    },
+    {
+      title: "High Risk Cases",
+      value: highRiskCases.toString(),
+      change: "+8%",
+      icon: AlertTriangle,
+      color: "text-red-600",
+    },
+    {
+      title: "Referrals Pending",
+      value: pendingReferrals.toString(),
+      change: "-3%",
+      icon: TrendingUp,
+      color: "text-orange-600",
+    },
+  ]
+
+  // Get recent patients (last 5)
+  const recentPatients = patients
+    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+    .slice(0, 5)
+    .map((patient) => {
+      const patientScreenings = screenings.filter((s) => s.patient === patient.id)
+      const latestScreening = patientScreenings.sort(
+        (a, b) => new Date(b.screening_date).getTime() - new Date(a.screening_date).getTime(),
+      )[0]
+
+      return {
+        id: patient.id.toString(),
+        name: `${patient.first_name} ${patient.last_name}`,
+        age: new Date().getFullYear() - new Date(patient.date_of_birth).getFullYear(),
+        riskLevel: latestScreening?.risk_level || "Unknown",
+        lastScreening: latestScreening?.screening_date || "Never",
+        location: `${patient.county}, ${patient.sub_county}`,
+      }
+    })
+
+  const getRiskBadgeColor = (risk: string) => {
+    switch (risk) {
+      case "High":
+        return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+      case "Moderate":
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
+      case "Low":
+        return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+      default:
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200"
+    }
+  }
+
+const monthlyTargets = {
+  screenings: 200,
+  highRisk: 50,
+  referrals: 47,
+}
+
+// Get current month/year
+const now = new Date()
+const currentMonth = now.getMonth()
+const currentYear = now.getFullYear()
+
+// Filter screenings for current month
+const monthlyScreenings = screenings.filter((s) => {
+  const date = new Date(s.screening_date)
+  return date.getMonth() === currentMonth && date.getFullYear() === currentYear
+})
+
+const screeningsCompleted = monthlyScreenings.length
+const highRiskIdentified = monthlyScreenings.filter((s) => s.risk_level === "HIGH").length
+const referralsCompleted = monthlyScreenings.filter((s) => s.referral_needed).length
+
+
   return (
-    <DashboardLayout>
-      <div className="space-y-6">
-        {/* Welcome Section */}
-        <div className="hero-gradient rounded-lg p-6">
-          <h1 className="text-3xl font-bold text-foreground mb-2">
-            Welcome back, {dashboardData.user?.username || "User"}!
-          </h1>
-          <p className="text-muted-foreground">Stay on top of your health with regular screenings and check-ups.</p>
-        </div>
-
-        {error && (
-          <div className="alert-error p-4 rounded-lg">
-            <p>{error}</p>
-          </div>
-        )}
-
-        {/* Stats Grid */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <StatsCard
-            title="Total Screenings"
-            value={dashboardData.totalScreenings}
-            description="Completed screenings"
-            icon={Activity}
-          />
-          <StatsCard
-            title="Next Appointment"
-            value={dashboardData.nextAppointment}
-            description="Upcoming screening"
-            icon={Calendar}
-          />
-          <StatsCard
-            title="Risk Level"
-            value={dashboardData.riskLevel}
-            description="Current assessment"
-            icon={CheckCircle}
-          />
-          <StatsCard title="Follow-ups" value={dashboardData.followUps} description="Pending actions" icon={Clock} />
-        </div>
-
-        {/* Recent Activity & Quick Actions */}
-        <div className="grid gap-6 md:grid-cols-2">
-          {/* Recent Screenings */}
-          <Card className="card-gradient">
-            <CardHeader>
-              <CardTitle>Recent Screenings</CardTitle>
-              <CardDescription>Your latest screening results</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {dashboardData.recentScreenings.length > 0 ? (
-                dashboardData.recentScreenings.map((screening) => (
-                  <div key={screening.id} className="flex items-center justify-between p-3 rounded-lg bg-background/50">
-                    <div>
-                      <p className="font-medium">{screening.type}</p>
-                      <p className="text-sm text-muted-foreground">{new Date(screening.date).toLocaleDateString()}</p>
-                    </div>
-                    <Badge className={`badge-${screening.riskLevel.toLowerCase()}-risk`}>
-                      {screening.riskLevel} Risk
-                    </Badge>
-                  </div>
-                ))
-              ) : (
-                <p className="text-muted-foreground text-center py-4">No recent screenings</p>
-              )}
-              <Link href="/users/screenings">
-                <Button variant="outline" className="w-full bg-transparent">
-                  View All Screenings
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-
-          {/* Quick Actions */}
-          <Card className="card-gradient">
-            <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
-              <CardDescription>Common tasks and shortcuts</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <Link href="/users/appointments">
-                <Button className="w-full justify-start btn-primary">
-                  <Calendar className="mr-2 h-4 w-4" />
-                  Schedule Appointment
-                </Button>
-              </Link>
-              <Link href="/users/screenings">
-                <Button variant="outline" className="w-full justify-start bg-transparent">
-                  <FileText className="mr-2 h-4 w-4" />
-                  View Test Results
-                </Button>
-              </Link>
-              <Link href="/users/resources">
-                <Button variant="outline" className="w-full justify-start bg-transparent">
-                  <Activity className="mr-2 h-4 w-4" />
-                  Health Resources
-                </Button>
-              </Link>
-              <Link href="/users/screenings">
-                <Button variant="outline" className="w-full justify-start bg-transparent">
-                  <TrendingUp className="mr-2 h-4 w-4" />
-                  Track Progress
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Health Alerts */}
-        <Card className="card-gradient">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-amber-500" />
-              Health Reminders
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between p-3 rounded-lg alert-info">
-                <div>
-                  <p className="font-medium">Annual Screening Due</p>
-                  <p className="text-sm opacity-80">Your next cervical cancer screening is due in 2 months</p>
+    <div className="min-h-screen mybackground">
+      {/* Header */}
+      {/* <header className="border-b bg-card header-gradient backdrop-blur-sm">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <div className="h-8 w-8 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center">
+                  <Activity className="h-5 w-5 text-white" />
                 </div>
-                <Link href="/users/appointments">
-                  <Button size="sm">Schedule</Button>
-                </Link>
+                <h1 className="text-2xl font-bold text-blue-600 dark:text-blue-400">MAMA-SCAN</h1>
               </div>
-              <div className="flex items-center justify-between p-3 rounded-lg alert-success">
-                <div>
-                  <p className="font-medium">Profile Complete</p>
-                  <p className="text-sm opacity-80">Your health profile is up to date</p>
+              <Badge variant="secondary" className="bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">
+                AI-Powered Screening
+              </Badge>
+            </div>
+            <div className="flex items-center space-x-4">
+              <Button variant="ghost" size="icon" className="hover:bg-blue-50 dark:hover:bg-blue-900/50">
+                <Bell className="h-5 w-5" />
+              </Button>
+              <div className="flex items-center space-x-2">
+                <div className="h-8 w-8 rounded-full bg-gradient-to-r from-blue-400 to-blue-500 flex items-center justify-center">
+                  <span className="text-sm font-medium text-white">
+                    {user?.username?.charAt(0).toUpperCase() || "U"}
+                  </span>
                 </div>
-                <CheckCircle className="h-5 w-5" />
+                <span className="text-sm font-medium">{user?.username || "User"}</span>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
+      </header> */}
+
+      <div className="container mybackground mx-auto px-4 py-6">
+        {/* Quick Actions */}
+        <div className="mb-6">
+          <div className="flex flex-col sm:flex-row mybackground gap-4 items-start sm:items-center justify-between">
+            <h2 className="text-2xl font-bold">Dashboard Overview</h2>
+            <div className="flex gap-2">
+              <Link href="/patients/new">
+                <Button className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white">
+                  <Plus className="h-4 w-4 mr-2" />
+                  New Patient
+                </Button>
+              </Link>
+              <Link href="/screening/new">
+                <Button variant="outline">
+                  <UserCheck className="h-4 w-4 mr-2" />
+                  Start Screening
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+          {stats.map((stat, index) => {
+            const Icon = stat.icon
+            return (
+              <Card key={index}>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
+                  <Icon className={`h-4 w-4 ${stat.color}`} />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{stat.value}</div>
+                  <p className="text-xs text-muted-foreground">
+                    <span className={stat.change.startsWith("+") ? "text-green-600" : "text-red-600"}>
+                      {stat.change}
+                    </span>{" "}
+                    from last month
+                  </p>
+                </CardContent>
+              </Card>
+            )
+          })}
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Recent Patients */}
+          <Card className="lg:col-span-2">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>Recent Patients</CardTitle>
+                  <CardDescription>Latest screening activities</CardDescription>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="relative">
+                    <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      placeholder="Search patients..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-8 w-64"
+                    />
+                  </div>
+                  <Button variant="outline" size="icon">
+                    <Filter className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {recentPatients.map((patient) => (
+                  <div key={patient.id} className="flex items-center justify-between p-4 border rounded-lg">
+                    <div className="flex items-center space-x-4">
+                      <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                        <span className="text-sm font-medium">
+                          {patient.name
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="font-medium">{patient.name}</p>
+                        <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                          <span>Age: {patient.age}</span>
+                          <span>•</span>
+                          <span className="flex items-center">
+                            <MapPin className="h-3 w-3 mr-1" />
+                            {patient.location}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-4">
+                      <Badge className={getRiskBadgeColor(patient.riskLevel)}>{patient.riskLevel} Risk</Badge>
+                      <div className="text-right">
+                        <p className="text-sm text-muted-foreground">Last Screening</p>
+                        <p className="text-sm font-medium">
+                          {patient.lastScreening === "Never"
+                            ? "Never"
+                            : new Date(patient.lastScreening).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4">
+                <Link href="/patients">
+                  <Button variant="outline" className="w-full">
+                    View All Patients
+                  </Button>
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Quick Stats & Actions */}
+          <div className="space-y-6">
+            {/* Screening Progress */}
+            {/* <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Monthly Progress</CardTitle>
+                <CardDescription>Screening targets for January 2024</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <div className="flex justify-between text-sm mb-2">
+                    <span>Screenings Completed</span>
+                    <span>156/200</span>
+                  </div>
+                  <Progress value={78} className="h-2" />
+                </div>
+                <div>
+                  <div className="flex justify-between text-sm mb-2">
+                    <span>High-Risk Identified</span>
+                    <span>47/50</span>
+                  </div>
+                  <Progress value={94} className="h-2" />
+                </div>
+                <div>
+                  <div className="flex justify-between text-sm mb-2">
+                    <span>Referrals Completed</span>
+                    <span>35/47</span>
+                  </div>
+                  <Progress value={74} className="h-2" />
+                </div>
+              </CardContent>
+            </Card> */}
+
+            
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Monthly Progress</CardTitle>
+                  <CardDescription>
+                    Screening targets for {now.toLocaleString("default", { month: "long", year: "numeric" })}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <div className="flex justify-between text-sm mb-2">
+                      <span>Screenings Completed</span>
+                      <span>
+                        {screeningsCompleted}/{monthlyTargets.screenings}
+                      </span>
+                    </div>
+                    <Progress value={Math.round((screeningsCompleted / monthlyTargets.screenings) * 100)} className="h-2" />
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-sm mb-2">
+                      <span>High-Risk Identified</span>
+                      <span>
+                        {highRiskIdentified}/{monthlyTargets.highRisk}
+                      </span>
+                    </div>
+                    <Progress value={Math.round((highRiskIdentified / monthlyTargets.highRisk) * 100)} className="h-2" />
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-sm mb-2">
+                      <span>Referrals Completed</span>
+                      <span>
+                        {referralsCompleted}/{monthlyTargets.referrals}
+                      </span>
+                    </div>
+                    <Progress value={Math.round((referralsCompleted / monthlyTargets.referrals) * 100)} className="h-2" />
+                  </div>
+                </CardContent>
+              </Card>
+
+
+            {/* Quick Actions */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Quick Actions</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <Link href="/screening/new" className="block">
+                  <Button variant="outline" className="w-full justify-start">
+                    <UserCheck className="h-4 w-4 mr-2" />
+                    Start New Screening
+                  </Button>
+                </Link>
+                <Link href="/patients" className="block">
+                  <Button variant="outline" className="w-full justify-start">
+                    <Users className="h-4 w-4 mr-2" />
+                    Manage Patients
+                  </Button>
+                </Link>
+                <Link href="/referrals" className="block">
+                  <Button variant="outline" className="w-full justify-start">
+                    <TrendingUp className="h-4 w-4 mr-2" />
+                    View Referrals
+                  </Button>
+                </Link>
+                <Link href="/analytics" className="block">
+                  <Button variant="outline" className="w-full justify-start">
+                    <Activity className="h-4 w-4 mr-2" />
+                    Analytics
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            {/* System Status */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">System Status</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">AI Model</span>
+                  <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">Online</Badge>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">Data Sync</span>
+                  <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">Synced</Badge>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">Offline Mode</span>
+                  <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">Available</Badge>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
-    </DashboardLayout>
+    </div>
   )
 }
