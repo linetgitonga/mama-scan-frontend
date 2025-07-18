@@ -61,10 +61,10 @@ export function Sidebar({ className, isCollapsed = false, onToggleCollapse }: Si
     <div className="flex h-full flex-col">
       <div className={cn("flex h-16 items-center border-b", isCollapsed && !isMobile ? "px-2" : "px-6")}>
         <Link href="/users" className="flex items-center space-x-2">
-          <div className="h-8 w-8 rounded-lg bg-gradient-primary flex items-center justify-center">
-            <span className="text-white font-bold text-sm">MS</span>
-          </div>
-          {(!isCollapsed || isMobile) && <span className="font-bold text-xl sidebar-text">MamaScan</span>}
+          {/* <div className="h-8 w-8 rounded-lg bg-gradient-primary flex items-center justify-center">
+            <span className="text-white font-bold text-sm">M</span>
+          </div> */}
+          {(!isCollapsed || isMobile) && <span className="font-bold text-xl sidebar-text">MAMA-SCAN</span>}
         </Link>
         {!isMobile && (
           <Button
