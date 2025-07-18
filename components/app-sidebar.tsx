@@ -68,27 +68,27 @@ const navigationData = {
       badge: null,
     },
     {
-      title: "Patients",
-      url: "/patients",
+      title: "Add Patients",
+      url: "/patients/new",
       icon: Users,
-      badge: "2,847",
-      items: [
-        {
-          title: "All Patients",
-          url: "/patients",
-          icon: Users,
-        },
-        {
-          title: "Add New Patient",
-          url: "/patients/new",
-          icon: Plus,
-        },
-        {
-          title: "Search Patients",
-          url: "/patients/search",
-          icon: Search,
-        },
-      ],
+      badge: "",
+      // items: [
+      //   {
+      //     title: "All Patients",
+      //     url: "/patients",
+      //     icon: Users,
+      //   },
+      //   {
+      //     title: "Add New Patient",
+      //     url: "/patients/new",
+      //     icon: Plus,
+      //   },
+      //   {
+      //     title: "Search Patients",
+      //     url: "/patients/search",
+      //     icon: Search,
+      //   },
+      // ],
     },
     {
       title: "Screening",
@@ -163,11 +163,7 @@ const navigationData = {
           url: "/resources/training",
           icon: Heart,
         },
-        {
-          title: "Contact Directory",
-          url: "/resources/contacts",
-          icon: Phone,
-        },
+        
       ],
     },
     {
@@ -178,17 +174,7 @@ const navigationData = {
           url: "/settings",
           icon: Settings,
         },
-        {
-          title: "Notifications",
-          url: "/notifications",
-          icon: Bell,
-          badge: "3",
-        },
-        {
-          title: "Help & Support",
-          url: "/support",
-          icon: Mail,
-        },
+        
       ],
     },
   ],
@@ -362,7 +348,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarSeparator />
 
         {/* Quick Actions */}
-        <SidebarGroup>
+        {/* <SidebarGroup>
           <SidebarGroupLabel>Quick Actions</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -384,7 +370,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
-        </SidebarGroup>
+        </SidebarGroup> */}
       </SidebarContent>
 
       <SidebarFooter>

@@ -1,11 +1,13 @@
-// const BASE_URL = "http://127.0.0.1:8000/api"
-const BASE_URL = "https://mamascan-backend.onrender.com/api"
+const BASE_URL = "http://127.0.0.1:8000/api"
+// const BASE_URL = "https://mamascan-backend.onrender.com/api"
 
 // Types based on your API documentation
 export interface User {
   id: number
   email: string
   username: string
+  first_name: string
+  last_name?: string
   user_type: "CHV" | "CLINICIAN" | "ADMIN" | "PATIENT" | "SPECIALIST"
   phone_number?: string
   county?: string
@@ -14,6 +16,7 @@ export interface User {
   is_active: boolean
   created_at: string
   updated_at: string
+  date_of_birth?: string
 
 }
 
@@ -53,6 +56,17 @@ export interface Patient {
 //   created_at: string
 //   updated_at: string
 // }
+export interface LoginResponse {
+  tokens?: {
+    access: string
+    refresh?: string
+  }
+  user?: {
+    id: number
+    email: string
+    // Add other user properties as needed
+  }
+}
 
 export interface ScreeningRecord {
   id: number
@@ -204,9 +218,10 @@ class ApiClient {
   //   return response
   // }
 
-  async login(email: string, password: string) {
+ 
+
+async login(email: string, password: string): Promise<LoginResponse> {
   try {
-    // Create a clean request without any existing auth headers
     const response = await fetch(`${this.baseURL}/auth/login/`, {
       method: "POST",
       headers: {
@@ -215,7 +230,7 @@ class ApiClient {
       body: JSON.stringify({ email, password }),
     });
 
-    const data = await response.json();
+    const data = await response.json() as LoginResponse;
     
     if (!response.ok) {
       throw new Error(data.detail || data.message || "Login failed");
@@ -225,7 +240,6 @@ class ApiClient {
       throw new Error("No access token received");
     }
 
-    // Only set token after successful login
     this.setToken(data.tokens.access);
     return data;
   } catch (error) {
@@ -235,7 +249,10 @@ class ApiClient {
 }
 
 
+
   async register(userData: {
+    first_name: string
+    last_name?: string
     email: string
     username: string
     password: string

@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import {
   Home,
   MessageSquare,
@@ -18,7 +19,10 @@ import {
   Menu,
   LogOut,
   Settings,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react"
+import { apiClient } from "@/lib/api"
 
 const navigation = [
   { name: "Dashboard", href: "/users", icon: Home },
@@ -26,7 +30,7 @@ const navigation = [
   { name: "My Screenings", href: "/users/screenings", icon: Activity },
   { name: "Appointments", href: "/users/appointments", icon: Calendar },
   { name: "Referrals", href: "/users/referrals", icon: FileText },
-  { name: "Resources", href: "/resources", icon: BookOpen },
+  { name: "Resources", href: "/users/resources", icon: BookOpen },
   { name: "Payments", href: "/users/payments", icon: CreditCard },
   { name: "Notifications", href: "/users/notifications", icon: Bell },
   { name: "Profile", href: "/users/profile", icon: User },
@@ -35,53 +39,107 @@ const navigation = [
 
 interface SidebarProps {
   className?: string
+  isCollapsed?: boolean
+  onToggleCollapse?: () => void
 }
 
-export function Sidebar({ className }: SidebarProps) {
+export function Sidebar({ className, isCollapsed = false, onToggleCollapse }: SidebarProps) {
   const pathname = usePathname()
 
-  const SidebarContent = () => (
+  const handleLogout = async () => {
+    try {
+      await apiClient.logout()
+      window.location.href = "/login"
+    } catch (error) {
+      console.error("Logout failed:", error)
+      apiClient.clearToken()
+      window.location.href = "/login"
+    }
+  }
+
+  const SidebarContent = ({ isMobile = false }: { isMobile?: boolean }) => (
     <div className="flex h-full flex-col">
-      <div className="flex h-16 items-center border-b px-6">
+      <div className={cn("flex h-16 items-center border-b", isCollapsed && !isMobile ? "px-2" : "px-6")}>
         <Link href="/users" className="flex items-center space-x-2">
           <div className="h-8 w-8 rounded-lg bg-gradient-primary flex items-center justify-center">
             <span className="text-white font-bold text-sm">MS</span>
           </div>
-          <span className="font-bold text-xl sidebar-text">MamaScan</span>
+          {(!isCollapsed || isMobile) && <span className="font-bold text-xl sidebar-text">MamaScan</span>}
         </Link>
+        {!isMobile && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onToggleCollapse}
+            className={cn("ml-auto h-6 w-6", isCollapsed && "ml-2")}
+          >
+            {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+          </Button>
+        )}
       </div>
 
-      <ScrollArea className="flex-1 px-3 py-4">
+      <ScrollArea className={cn("flex-1 py-4", isCollapsed && !isMobile ? "px-2" : "px-3")}>
         <nav className="space-y-2">
-          {navigation.map((item) => {
-            const isActive = pathname === item.href
-            return (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={cn(
-                  "flex items-center space-x-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                  isActive
-                    ? "bg-primary text-primary-foreground"
-                    : "sidebar-text hover:bg-accent hover:text-accent-foreground",
-                )}
-              >
-                <item.icon className="h-4 w-4" />
-                <span>{item.name}</span>
-              </Link>
-            )
-          })}
+          <TooltipProvider>
+            {navigation.map((item) => {
+              const isActive = pathname === item.href
+              const NavItem = (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={cn(
+                    "flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                    isActive
+                      ? "bg-primary text-primary-foreground"
+                      : "sidebar-text hover:bg-accent hover:text-accent-foreground",
+                    isCollapsed && !isMobile ? "justify-center" : "space-x-3",
+                  )}
+                >
+                  <item.icon className="h-4 w-4 flex-shrink-0" />
+                  {(!isCollapsed || isMobile) && <span>{item.name}</span>}
+                </Link>
+              )
+
+              if (isCollapsed && !isMobile) {
+                return (
+                  <Tooltip key={item.name}>
+                    <TooltipTrigger asChild>{NavItem}</TooltipTrigger>
+                    <TooltipContent side="right">
+                      <p>{item.name}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                )
+              }
+
+              return NavItem
+            })}
+          </TooltipProvider>
         </nav>
       </ScrollArea>
 
-      <div className="border-t p-4">
-        <Button
-          variant="ghost"
-          className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950"
-        >
-          <LogOut className="mr-2 h-4 w-4" />
-          Sign Out
-        </Button>
+      <div className={cn("border-t p-4", isCollapsed && !isMobile && "p-2")}>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                onClick={handleLogout}
+                variant="ghost"
+                className={cn(
+                  "w-full text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950",
+                  isCollapsed && !isMobile ? "justify-center px-2" : "justify-start",
+                )}
+              >
+                <LogOut className="h-4 w-4" />
+                {(!isCollapsed || isMobile) && <span className="ml-2">Sign Out</span>}
+              </Button>
+            </TooltipTrigger>
+            {isCollapsed && !isMobile && (
+              <TooltipContent side="right">
+                <p>Sign Out</p>
+              </TooltipContent>
+            )}
+          </Tooltip>
+        </TooltipProvider>
       </div>
     </div>
   )
@@ -89,7 +147,13 @@ export function Sidebar({ className }: SidebarProps) {
   return (
     <>
       {/* Desktop Sidebar */}
-      <div className={cn("hidden lg:flex lg:w-64 lg:flex-col lg:fixed lg:inset-y-0 sidebar-primary", className)}>
+      <div
+        className={cn(
+          "hidden lg:flex lg:flex-col lg:fixed lg:inset-y-0 sidebar-primary transition-all duration-300",
+          isCollapsed ? "lg:w-16" : "lg:w-64",
+          className,
+        )}
+      >
         <SidebarContent />
       </div>
 
@@ -101,7 +165,7 @@ export function Sidebar({ className }: SidebarProps) {
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="w-64 p-0 sidebar-primary">
-          <SidebarContent />
+          <SidebarContent isMobile />
         </SheetContent>
       </Sheet>
     </>

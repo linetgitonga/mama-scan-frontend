@@ -20,6 +20,7 @@ import {
   Video,
   Headphones,
 } from "lucide-react"
+import { DashboardLayout } from "@/components/user/dashboard-layout"
 
 interface TrainingModule {
   id: number
@@ -195,6 +196,7 @@ export default function TrainingMaterialsPage() {
   }
 
   return (
+    <DashboardLayout>
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center gap-2 mb-6">
         <BookOpen className="h-6 w-6" />
@@ -399,5 +401,7 @@ export default function TrainingMaterialsPage() {
         </Card>
       )}
     </div>
+    </DashboardLayout>
   )
+
 }

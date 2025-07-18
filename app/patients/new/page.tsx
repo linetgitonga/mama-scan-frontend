@@ -55,6 +55,7 @@ export default function NewPatientPage() {
         phone_number: formData.phoneNumber,
         email: formData.email || undefined,
         date_of_birth: formData.dateOfBirth,
+        location: `${formData.county}, ${formData.subCounty}`,
         county: formData.county,
         sub_county: formData.subCounty,
         marital_status: formData.maritalStatus || undefined,
@@ -65,7 +66,7 @@ export default function NewPatientPage() {
 
       // Redirect to patients list after successful creation
       setTimeout(() => {
-        router.push("/patients")
+        router.push("/screening/new")
       }, 2000)
     } catch (error: any) {
       setError(error.message || "Failed to create patient")
@@ -264,11 +265,11 @@ export default function NewPatientPage() {
                         <SelectValue placeholder="Select marital status" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="single">Single</SelectItem>
-                        <SelectItem value="married">Married</SelectItem>
-                        <SelectItem value="divorced">Divorced</SelectItem>
-                        <SelectItem value="widowed">Widowed</SelectItem>
-                        <SelectItem value="separated">Separated</SelectItem>
+                        <SelectItem value="SINGLE">Single</SelectItem>
+                        <SelectItem value="MARRIED">Married</SelectItem>
+                        <SelectItem value="DIVORCED">Divorced</SelectItem>
+                        <SelectItem value="WIDOWED">Widowed</SelectItem>
+                        <SelectItem value="SEPARATED">Separated</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

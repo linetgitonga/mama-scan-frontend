@@ -11,6 +11,7 @@ import { MessageCircle, Send, Bot, User, Loader2 } from "lucide-react"
 import { apiClient } from "../../../lib/api"
 import { useAuth } from "../../../hooks/useAuth"
 import { useRouter } from "next/navigation"
+import { DashboardLayout } from "@/components/user/dashboard-layout"
 interface Message {
   id: string
   content: string
@@ -119,6 +120,7 @@ export default function ChatbotPage() {
     }
 
   return (
+    <DashboardLayout>
     <div className="container mx-auto p-6 max-w-4xl">
       <div className="flex items-center gap-2 mb-6">
         <MessageCircle className="h-6 w-6" />
@@ -257,5 +259,6 @@ export default function ChatbotPage() {
         </CardContent>
       </Card>
     </div>
+    </DashboardLayout>
   )
 }

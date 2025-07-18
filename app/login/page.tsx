@@ -1,7 +1,5 @@
 "use client"
 
-import type React from "react"
-
 import { useState } from "react"
 import { Button } from "../../components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card"
@@ -30,18 +28,22 @@ export default function LoginPage() {
     setError("")
 
     try {
-      // await login(email, password)
-      const response = await login(email, password);
+      const response = await login(email, password)
+      
       console.log('User successfully logged in:', {
-      email: email,
-      userId: response,
-      timestamp: new Date().toISOString(),
-    });
-      router.push("/dashboard")
+        email: email,
+        userId: response.user.id,
+        timestamp: new Date().toISOString(),
+      })
+
+      if (response.user.user_type === "PATIENT") {
+        router.push("/users")
+      } else {
+        router.push("/dashboard")
+      }
     } catch (error: any) {
-      console.error("Login error:", error);
-      setError(error.message || "Invalid email or password");
-      // setError(error.message || "Login failed. Please check your credentials.")
+      console.error("Login error:", error)
+      setError(error.message || "Invalid email or password")
     } finally {
       setIsLoading(false)
     }
